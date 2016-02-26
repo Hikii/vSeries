@@ -8,24 +8,24 @@ namespace Azir
     {
         public static Menu config;
 
-        public static string menuName = "Assembly Name Here";
+        public static string menuName = "Azir # By Veto";
 
 
-        // private static Menu TargetSelectorMenu;
-        private static Orbwalking.Orbwalker Orbwalker;
+        private static Menu TargetSelectorMenu;
+        public static Orbwalking.Orbwalker Orbwalker;
 
         public static void LoadMenu()
         {
             config = new Menu(menuName, menuName, true);
 
-            /*
             TargetSelectorMenu = new Menu("Target Selector", "Target Selector");
             TargetSelector.AddToMenu(TargetSelectorMenu);
             config.AddSubMenu(TargetSelectorMenu);
-            */
 
+            
             Orbwalker = new Orbwalking.Orbwalker(config.SubMenu("Orbwalker"));
             config.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
+            
 
             var comboMenu = new Menu("Combo", "# Combo"); {
                 comboMenu.AddItem(new MenuItem("Combo.Q.Use", "Use Q")).SetValue(true);
@@ -59,12 +59,6 @@ namespace Azir
                 config.AddSubMenu(laneMenu);
             }
 
-            var lasthitMenu = new Menu("Lasthit", "# Lasthit"); {
-                // add stuff
-
-                config.AddSubMenu(lasthitMenu);
-            }
-
             var killstealMenu = new Menu("Killsteal", "# Killsteal"); {
                 killstealMenu.AddItem(new MenuItem("Killsteal.Q.Use", "Use Q")).SetValue(true);
             }
@@ -76,13 +70,12 @@ namespace Azir
             }
 
             var miscMenu = new Menu("Misc", "# Misc"); {
-                miscMenu.AddItem(new MenuItem("Escape", "W E Q Escape")).SetValue(new KeyBind('Z', KeyBindType.Press));
+                miscMenu.AddItem(new MenuItem("Escape", "Flee")).SetValue(new KeyBind('Z', KeyBindType.Press));
 
                 config.AddSubMenu(miscMenu);
             }
 
             var drawMenu = new Menu("Drawing", "# Drawings"); {
-                drawMenu.AddItem(new MenuItem("DisableAll", "Disable all Drawings")).SetValue(false);
                 drawMenu.AddItem(new MenuItem("DrawDamage", "Draw Damage")).SetValue(true);
 
                 drawMenu.AddItem(new MenuItem("Draw.Q", "Draw Q")).SetValue(new Circle(true, Color.Blue));
@@ -93,7 +86,7 @@ namespace Azir
                 config.AddSubMenu(drawMenu);
             }
 
-            config.AddItem(new MenuItem("Developed", "Developed by Veto"));
+            config.AddItem(new MenuItem("Developed", "<font color='#00ffff'>Developed by Veto</font>"));
             config.AddItem(new MenuItem("Bugs", "Report bugs to me!"));
 
             config.AddToMainMenu();

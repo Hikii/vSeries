@@ -13,7 +13,7 @@ namespace Azir
 {
     class Azir
     {
-        public static Obj_AI_Hero Player = Player;
+        public static Obj_AI_Hero Player = ObjectManager.Player;
 
         public static List<Obj_AI_Minion> AzirSoldiers;
 
@@ -46,16 +46,24 @@ namespace Azir
         {
             if (Player.IsDead || args == null)
                 return;
-            /*
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                Combo();
+            
+            switch (MenuConfig.Orbwalker.ActiveMode)
+            {
+                case Orbwalking.OrbwalkingMode.Combo:
+                    Combo();
+                    break;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                Harass();
+                case Orbwalking.OrbwalkingMode.Mixed:
+                    Harass();
+                    break;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                Laneclear();
-            */
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    Laneclear();
+                    break;
+            }
+
+            if (IsActive("Combo.All_In"))
+                AllInCombo();
 
             if (IsActive("EliteCombo"))
                 EliteAzirCombo(Game.CursorPos);
@@ -90,9 +98,6 @@ namespace Azir
             var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
             var extendTarget = TargetSelector.GetTarget(Spells.Q.Range + 400, TargetSelector.DamageType.Magical);
 
-            if (target != null)
-            {
-
                 if (IsActive("Combo.Q.Use") && Spells.Q.IsReady() && target.IsValidTarget(Spells.Q.Range))
                 {
                     foreach (var soldier in SoldierManager.ActiveSoldiers)
@@ -121,7 +126,6 @@ namespace Azir
                 {
                     Spells.R.Cast(target);
                 }
-            }
         }
 
         static void AllInCombo()
