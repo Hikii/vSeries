@@ -92,7 +92,7 @@ namespace Azir
             return AzirSoldiers.Where(soldier => !soldier.IsDead).OrderBy(soldier => soldier.Distance(pos, true) - 
             ((soldier.IsMoving)?500:0)).FirstOrDefault();
         }
-        
+        /*
         static void Combo()
         {
             var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
@@ -126,6 +126,30 @@ namespace Azir
                 {
                     Spells.R.Cast(target);
                 }
+        }
+        */
+        static void Combo()
+        {
+            var target = TargetSelector.GetSelectedTarget();
+            var extendTarget = TargetSelector.GetTarget(Spells.Q.Range + 400, TargetSelector.DamageType.Magical);
+
+            if ((IsActive("Combo.W.Use")) && Spells.W.IsReady())
+                Spells.W.Cast(target);
+
+            if (IsActive("Combo.Q.Use") && Spells.Q.IsReady() && target.IsValidTarget(Spells.Q.Range))
+            {
+                if (Player.ServerPosition.Distance(target.ServerPosition) < Spells.Q.Range)
+                {
+                    var prediction = Spells.Q.GetPrediction(target);
+                    if (prediction.Hitchance >= HitChance.High)
+                    {
+                        Spells.Q.Cast(target);
+                    }
+                }
+            }
+
+            if (IsActive("Combo.R.Use") && Spells.R.IsReady() && Spells.R.IsInRange(target))
+                Spells.R.Cast(target);
         }
 
         static void AllInCombo()
