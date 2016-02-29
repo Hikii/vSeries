@@ -15,10 +15,6 @@ namespace Azir
     {
         public static Obj_AI_Hero Player = ObjectManager.Player;
 
-        public static List<Obj_AI_Minion> AzirSoldiers;
-
-        public static List<Obj_AI_Minion> ActiveSoldiers { get { return AzirSoldiers; } }
-
         internal static void Load(EventArgs args)
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
@@ -32,14 +28,14 @@ namespace Azir
             Spells.Initialise();
             MenuConfig.LoadMenu();
 
-            AzirSoldiers = new List<Obj_AI_Minion>();
+            List<GameObject> Soldiers = SoldierManager.AzirSoldiers;
 
             Game.OnUpdate += Game_OnUpdate;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat("<font color='#fffff'>[00:00] [Assembly Name Here]</font> <font color='#1abc9c'>Activated</font>");
-            Game.PrintChat("<font color='#fffff'>[00:01] Remember to <font color='#1abc9c'>Upvote</font> in the Assembly Database!</font>");
+            Game.PrintChat("[00:00] Azir # By Veto");
+            Game.PrintChat("[00:00] Remember to Upvote in the Assembly Database!");
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -77,21 +73,7 @@ namespace Azir
             return MenuConfig.config.Item(menuItem).GetValue<KeyBind>().Active;
         }
 
-        private static int GetValue(string menuItem)
-        {
-            return MenuConfig.config.Item(menuItem).GetValue<Slider>().Value;
-        }
-
-        static List<Obj_AI_Minion> Soldiers()
-        {
-            return AzirSoldiers.Where(soldier => !soldier.IsDead).ToList();
-        }
-
-        static Obj_AI_Minion getCloseSoldier(Vector3 pos)
-        {
-            return AzirSoldiers.Where(soldier => !soldier.IsDead).OrderBy(soldier => soldier.Distance(pos, true) - 
-            ((soldier.IsMoving)?500:0)).FirstOrDefault();
-        }
+        #region Commented Combo
         /*
         static void Combo()
         {
@@ -128,126 +110,86 @@ namespace Azir
                 }
         }
         */
+
+        #endregion
         static void Combo()
         {
-            var target = TargetSelector.GetSelectedTarget();
-            var extendTarget = TargetSelector.GetTarget(Spells.Q.Range + 400, TargetSelector.DamageType.Magical);
+            var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
 
-            if ((IsActive("Combo.W.Use")) && Spells.W.IsReady())
-                Spells.W.Cast(target);
-
-            if (IsActive("Combo.Q.Use") && Spells.Q.IsReady() && target.IsValidTarget(Spells.Q.Range))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range - 15)))
             {
-                if (Player.ServerPosition.Distance(target.ServerPosition) < Spells.Q.Range)
-                {
-                    var prediction = Spells.Q.GetPrediction(target);
-                    if (prediction.Hitchance >= HitChance.High)
-                    {
-                        Spells.Q.Cast(target);
-                    }
-                }
-            }
+                var closestPos = Player.Position.Extend(enemy.Position, SoldierManager.SoldierAttackRange);
 
-            if (IsActive("Combo.R.Use") && Spells.R.IsReady() && Spells.R.IsInRange(target))
-                Spells.R.Cast(target);
+                if (MenuConfig.ComboR && Spells.R.IsReady() && Player.ServerPosition.Distance(enemy.ServerPosition) < Spells.R.Range)
+                    Spells.R.Cast(enemy);
+
+                if (MenuConfig.ComboW && Spells.W.IsReady())
+                    Spells.W.Cast(closestPos);
+
+                if (MenuConfig.ComboQ && Spells.Q.IsReady() && Player.ServerPosition.Distance(enemy.ServerPosition) > SoldierManager.SoldierAttackRange)
+                    Spells.Q.Cast(enemy);
+            }
         }
 
         static void AllInCombo()
         {
-            var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
-            var extendTarget = TargetSelector.GetTarget(Spells.Q.Range + 400, TargetSelector.DamageType.Magical);
-
-            if (target != null)
-            {
-                if (IsActive("Combo.All_In") && Spells.Q.IsReady() && Spells.W.IsReady() && Spells.E.IsReady() && Spells.R.IsReady() && target.IsValidTarget(Spells.Q.Range))
-                {
-                    foreach (var soldier in SoldierManager.ActiveSoldiers)
-                    {
-                        if (Player.ServerPosition.Distance(target.ServerPosition) < Spells.Q.Range)
-                        {
-                            Spells.W.Cast(Player.Position.To2D().Extend(target.Position.To2D(), 450));
-                            Spells.Q.UpdateSourcePosition(soldier.Position, Player.ServerPosition);
-                            Spells.Q.Cast(target);
-                            Spells.E.Cast(Game.CursorPos);
-                            Spells.R.Cast(target);
-                            Spells.W.Cast(target);
-                        }
-                    }
-                }
-            }
+            
         }
 
         static void EliteAzirCombo(Vector3 pos)
         {
-            var extended = Player.ServerPosition.To2D().Extend(pos.To2D(), 1800f);
-            var extendBack = Player.ServerPosition.To2D().Extend(pos.To2D(), -700f);
-            var summonSoldier = Game.CursorPos + 100f;
-            // var closest = getCloseSoldier(pos);
-            // var playerPos = Player.ServerPosition;
-            // var target = TargetSelector.GetTarget(Spells.W.Range + 100, TargetSelector.DamageType.Magical);
+            var backCast;
+            backCast = Player.ServerPosition.To2D();
 
-            Spells.W.Cast(summonSoldier);
-            Utility.DelayAction.Add(0, () => Spells.E.Cast(Game.CursorPos));
-            Utility.DelayAction.Add(34, () => Spells.R.Cast(extendBack));
-            Utility.DelayAction.Add(425, () => Spells.Q.Cast(extendBack));
+            Spells.W.Cast(Player.ServerPosition.To2D().Extend(pos.To2D(), Spells.W.Range));
+            Spells.E.Cast(Game.CursorPos);
+
+            Utility.DelayAction.Add(
+                34,
+                () =>
+                {
+                    Spells.R.Cast(Player.ServerPosition.To2D().Extend(pos.To2D(), backCast));
+                }
+            );
+
+            Utility.DelayAction.Add(
+                425,
+                () =>
+                {
+                    Spells.Q.Cast(Player.ServerPosition.To2D().Extend(pos.To2D(), backCast));
+                }
+            );
 
             MenuConfig.config.Item("EliteCombo").SetValue(new KeyBind('G', KeyBindType.Press, false));
         }
 
         static void Harass()
         {
-            var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
+            if (Player.ManaPercent < MenuConfig.HarassMana)
+                return; 
 
-            if (Player.ManaPercent < (GetValue("Harass.Mana"))) // MenuConfig.config.SubMenu("Harass").Item("Harass.Mana").GetValue<Slider>().Value)
-                return;
-
-            if (target != null)
-                return;
-
-            if (IsActive("Harass.Q.Use") && Spells.Q.IsReady() && Player.Mana > (GetValue("Harass.Mana")))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range)))
             {
-                var qTarget = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
+                var closestPos = Player.Position.Extend(enemy.Position, SoldierManager.SoldierAttackRange);
 
-                if (qTarget != null)
-                {
-                    foreach (var soldier in SoldierManager.AzirSoldiers)
-                    {
-                        Spells.Q.UpdateSourcePosition(soldier.Position, Player.ServerPosition);
-                        Spells.Q.Cast(qTarget);
-                    }
-                }
+                if (MenuConfig.HarassW && Spells.W.IsReady())
+                Spells.W.Cast(closestPos);
+
+                if (MenuConfig.HarassQ && Spells.W.IsReady() && Player.ServerPosition.Distance(enemy.ServerPosition) > Spells.W.Range)
+                    Spells.Q.Cast(enemy);
             }
-
-            if (IsActive("Harass.W.Use") & Spells.W.IsReady() && Player.Mana > (GetValue("Harass.Mana")))
-                Spells.W.Cast(Player.Position.To2D().Extend(target.Position.To2D(), 450));
         }
 
         public static void Laneclear()
         {
-            if (Player.Mana > (GetValue("Lane.Mana")))
-                return;
+            var Minions = MinionManager.GetMinions(Player.ServerPosition, Spells.W.Range);
 
-            if (IsActive("Lane.Use.Q") && Spells.Q.IsReady() && Player.Mana > (GetValue("Lane.Mana")))
+            if (Player.ManaPercent >= MenuConfig.LaneMana && MenuConfig.LaneW)
             {
-                MinionManager.FarmLocation farm = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells.Q.Range + 100).Select(player => 
-                    player.ServerPosition.To2D()).ToList(), SoldierManager.SoldierAttackRange, Spells.Q.Range + 100);
-
-                if (farm.MinionsHit >= MenuConfig.config.SubMenu("Lane").Item("Lane.Min.Minions").GetValue<Slider>().Value)
-                    Spells.Q.Cast(farm.Position);
-
-            }
-
-            if (IsActive("Lane.Use.W") && Spells.W.IsReady() && Spells.W.Instance.Ammo > 0 && Player.Mana > (GetValue("Lane.Mana")))
-            {
-                var minions = MinionManager.GetMinions(Spells.W.Range + SoldierManager.SoldierAttackRange / 2f);
-
-                if (minions.Count > 1)
+                foreach (var minion in Minions)
                 {
-                    var summon = MinionManager.GetBestCircularFarmLocation(minions.Select(player => player.ServerPosition.To2D()).ToList(),
-                        SoldierManager.SoldierAttackRange, Spells.W.Range);
-
-                    if (summon.MinionsHit > 2)
-                        Spells.W.Cast(summon.Position);
+                    if (minion.IsValidTarget())
+                        Spells.W.Cast(minion);
                 }
             }
         }
@@ -327,17 +269,14 @@ namespace Azir
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            if (!IsActive("DisableDraw"))
-            {
-                if (IsActive("Draw.Q"))
-                    Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.Q").GetValue<Circle>().Color);
-                if (IsActive("Draw.W"))
-                    Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.W").GetValue<Circle>().Color);
-                if (IsActive("Draw.E"))
-                    Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.E").GetValue<Circle>().Color);
-                if (IsActive("Draw.R"))
-                    Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.R").GetValue<Circle>().Color);
-            } 
+            if (IsActive("Draw.Q"))
+                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.Q").GetValue<Circle>().Color);
+            if (IsActive("Draw.W"))
+                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.W").GetValue<Circle>().Color);
+            if (IsActive("Draw.E"))
+                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.E").GetValue<Circle>().Color);
+            if (IsActive("Draw.R"))
+                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.R").GetValue<Circle>().Color);
         }
     }
 }
