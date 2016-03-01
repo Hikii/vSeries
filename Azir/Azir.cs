@@ -250,13 +250,13 @@ namespace Azir
         static void Drawing_OnDraw(EventArgs args)
         {
             if (MenuConfig.DrawQ)
-                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.Q").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, Color.Blue);
             if (MenuConfig.DrawW)
-                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.W").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(Player.Position, Spells.W.Range, Color.AliceBlue);
             if (MenuConfig.DrawE)
-                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.E").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(Player.Position, Spells.E.Range, Color.BlueViolet);
             if (MenuConfig.DrawR)
-                Render.Circle.DrawCircle(Player.Position, Spells.Q.Range, MenuConfig.config.SubMenu("Drawing").Item("Draw.R").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(Player.Position, Spells.R.Range, Color.LightBlue);
         }
     }
 }
