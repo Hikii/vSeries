@@ -118,8 +118,7 @@ namespace Azir
 
         static void EliteAzirCombo(Vector3 pos)
         {
-            var backCast = Vector2.Zero;
-            backCast = Player.ServerPosition.To2D();
+            var backCast = Player.ServerPosition.To2D().Extend(pos.To2D(), -700);
 
             Spells.W.Cast(Player.ServerPosition.To2D().Extend(pos.To2D(), Spells.W.Range));
             Spells.E.Cast(Game.CursorPos);
@@ -128,7 +127,7 @@ namespace Azir
                 34,
                 () =>
                 {
-                    Spells.R.Cast(Player.ServerPosition.To2D().Extend(pos.To2D(), Player.Distance(backCast)));
+                    Spells.R.Cast(backCast);
                 }
             );
 
@@ -136,7 +135,7 @@ namespace Azir
                 425,
                 () =>
                 {
-                    Spells.Q.Cast(Player.ServerPosition.To2D().Extend(pos.To2D(), Player.Distance(backCast)));
+                    Spells.Q.Cast(backCast);
                 }
             );
 
