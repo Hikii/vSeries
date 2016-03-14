@@ -31,7 +31,7 @@ namespace vSupport_Series.Champions
 
             Q.SetSkillshot(0.25f, 70f, 1200f, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 275f, 1300f, false, SkillshotType.SkillshotCircle);
-            R.SetSkillshot(1000f, 190f, int.MaxValue, false, SkillshotType.SkillshotCircle);
+            R.SetSkillshot(1f, 190f, int.MaxValue, false, SkillshotType.SkillshotCircle);
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {
@@ -134,7 +134,8 @@ namespace vSupport_Series.Champions
 
         private static void OnDelete(GameObject objects, EventArgs args)
         {
-            if (objects.Name == "Lux_Base_E_tar_nova.troy")
+            // if (objects.Name == "Lux_Base_E_tar_nova.troy")
+            if (objects.Name == "Lux_Base_E_mis.troy")
             {
                 LuxE = null;
             }
