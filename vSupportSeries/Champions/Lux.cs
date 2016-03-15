@@ -120,7 +120,6 @@ namespace vSupport_Series.Champions
             GameObject.OnDelete += OnDelete;
             Drawing.OnDraw += LuxOnDraw;
             AntiGapcloser.OnEnemyGapcloser += LuxOnEnemyGapcloser;
-            Interrupter2.OnInterruptableTarget += LuxOnInterruptableTarget;
         }
 
         private static void OnCreate(GameObject objects, EventArgs args)
@@ -138,14 +137,6 @@ namespace vSupport_Series.Champions
             if (objects.Name == "Lux_Base_E_mis.troy")
             {
                 LuxE = null;
-            }
-        }
-
-        private static void LuxOnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
-        {
-            if (Q.IsReady() && sender.IsValidTarget(1175) && MenuCheck("lux.inter", Config))
-            {
-                Q.CastIfHitchanceEquals(sender, HitChance.High);
             }
         }
 
