@@ -68,11 +68,22 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(drawing);
                 } 
                 Config.AddItem(new MenuItem("trundle.pillar.block", "Use (E) for Blitzcrank Q").SetValue(true));
+                Config.AddItem(new MenuItem("trundle.interrupter", "Interrupter").SetValue(true)).SetTooltip("Only cast if enemy spell priorty > danger");
             }
             Config.AddToMainMenu();
             Game.OnUpdate += TrundleOnUpdate;
             Drawing.OnDraw += TrundleOnDraw;
+            Interrupter2.OnInterruptableTarget += TrundleInterrupter;
             Obj_AI_Base.OnProcessSpellCast += TrundleOnProcessSpellCast;
+        }
+
+        private static void TrundleInterrupter(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (sender.IsEnemy && MenuCheck("trundle.interrupter", Config) && sender.IsValidTarget(E.Range) &&
+                args.DangerLevel >= Interrupter2.DangerLevel.High)
+            {
+                E.Cast(sender.Position);
+            }
         }
 
         private static void TrundleOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
