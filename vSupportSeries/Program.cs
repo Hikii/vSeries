@@ -16,6 +16,10 @@ namespace vSupport_Series
         {
             switch (ObjectManager.Player.ChampionName)
             {
+                case "Alistar":
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new Alistar();
+                    break;
                 case "Blitzcrank":
                     // ReSharper disable once ObjectCreationAsStatement
                     new Blitzcrank();
