@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>vSupport_Series</RootNamespace>
     <AssemblyName>vSupport Series</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -61,8 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Champions\Alistar.cs" />
     <Compile Include="Champions\Blitzcrank.cs" />
     <Compile Include="Champions\Fiddlesticks.cs" />
+    <Compile Include="Champions\Morgana.cs" />
     <Compile Include="Champions\Janna.cs" />
     <Compile Include="Champions\Leona.cs" />
     <Compile Include="Champions\Lux.cs" />
