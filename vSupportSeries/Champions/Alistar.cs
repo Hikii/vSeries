@@ -13,6 +13,8 @@ namespace vSupport_Series.Champions
         public static Menu Config;
         public static Spell Q, W, E, R;
         public static Orbwalking.Orbwalker Orbwalker;
+
+        private static Obj_AI_Base Player = ObjectManager.Player;
         
         public Alistar()
         {
@@ -66,6 +68,13 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(healManager);
                 }
 
+                var ult = new Menu("(R) Auto Ultimate", "(R) Auto Ultimate");
+                {
+                    ult.AddItem(new MenuItem("alistar.auto.ult", "Auto Ult (R)")).SetValue(true);
+                    ult.AddItem(new MenuItem("alistar.min.ult", "Min. HP Percent to Ult")).SetValue(new Slider(40, 1, 99));
+                    ult.AddItem(new MenuItem("alistar.min.enemy", "Min. Enemies to Ult")).SetValue(new Slider(2, 1, 5));
+                }
+
                 var misc = new Menu("Miscellaneous", "Miscellaneous");
                 {
                     misc.AddItem(new MenuItem("alistar.anti", "Gapcloser (W)").SetValue(true));
@@ -114,6 +123,16 @@ namespace vSupport_Series.Champions
                     Combo();
                     break;
             }
+
+            if (!MenuCheck("alistar.heal.disable", Config))
+            {
+                AutoHeal();
+            }
+
+            if (MenuCheck("alistar.auto.ult", Config))
+            {
+                AutoUlt();
+            }
         }
 
         private static void Combo()
@@ -145,6 +164,15 @@ namespace vSupport_Series.Champions
                 {
                     E.CastOnUnit(heal);
                 }
+            }
+        }
+
+        private static void AutoUlt()
+        {
+            if (Player.HealthPercent < SliderCheck("alistar.min.ult", Config) &&
+                Player.CountEnemiesInRange(1500f) >= SliderCheck("alistar.min.enemy", Config) && R.IsReady())
+            {
+                R.Cast();
             }
         }
 
