@@ -40,6 +40,10 @@ namespace vSupport_Series
                     // ReSharper disable once ObjectCreationAsStatement
                     new Lux();
                     break;
+                case "Morgana":
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new Morgana();
+                    break;
                 case "Nami":
                     // ReSharper disable once ObjectCreationAsStatement
                     new Nami();
