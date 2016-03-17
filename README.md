@@ -1,5 +1,4 @@
 ## vSeries
-### My AIOs for LeagueSharp
 
 ##### SUPPORT AIO
 ###### Current Champs Supported: 
