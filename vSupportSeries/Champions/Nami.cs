@@ -166,14 +166,14 @@ namespace vSupport_Series.Champions
                 return;
             }
 
-            if (MenuCheck("nami.q.combo",Config) && Q.IsReady())
+            if (MenuCheck("nami.q.harass", Config) && Q.IsReady())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "nami.q.hitchance"));
                 }
             }
-            if (MenuCheck("nami.w.combo", Config) && W.IsReady())
+            if (MenuCheck("nami.w.harass", Config) && W.IsReady())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
                 {
@@ -192,6 +192,12 @@ namespace vSupport_Series.Champions
             {
                 return;
             }
+
+            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain())
+            {
+                return; 
+            }
+
             if (W.IsReady() && !ObjectManager.Player.IsDead && !ObjectManager.Player.IsZombie)
             {
                 foreach (var ally in HeroManager.Allies.Where(x => x.Distance(ObjectManager.Player.Position) < W.Range && !x.IsDead && !x.IsZombie))
