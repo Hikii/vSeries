@@ -15,6 +15,9 @@ namespace vSupport_Series.Champions
 
         private static Obj_AI_Hero Player = ObjectManager.Player;
 
+        private static bool hasPassive = false;
+        private readonly static string buffName = "taricgemcraftbuff";
+
         public Taric()
         {
             TaricOnLoad();
@@ -124,6 +127,8 @@ namespace vSupport_Series.Champions
 
         private static void TaricOnUpdate(EventArgs args)
         {
+            hasPassive = Player.HasBuff(buffName);
+
             switch (Orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
@@ -138,6 +143,11 @@ namespace vSupport_Series.Champions
             {
                 QManager();
             }
+        }
+
+        private static bool GetPassive()
+        {
+            return hasPassive;
         }
 
         private static void QManager()
@@ -196,6 +206,31 @@ namespace vSupport_Series.Champions
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     E.Cast(enemy);
+                }
+            }
+        }
+
+        private static void SpellWeaving()
+        {
+            var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && t != null)
+            {
+                if (E.IsReady() && !GetPassive())
+                {
+                    E.Cast(t);
+                }
+                else if (R.IsReady() && t.IsValidTarget(R.Range) && !E.IsReady() && !GetPassive())
+                {
+                    R.Cast();
+                }
+                else if (W.IsReady() && t.IsValidTarget(W.Range) && !R.IsReady() && E.IsReady() && !GetPassive())
+                {
+                    W.Cast();
+                }
+                else if (Q.IsReady() && t.IsValidTarget(Q.Range) && !W.IsReady() && !R.IsReady() && !E.IsReady() && !GetPassive())
+                {
+                    Q.CastOnUnit(Player);
                 }
             }
         }
