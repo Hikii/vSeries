@@ -1,0 +1,13 @@
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\vSupport Series.exe.config
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\vSupport Series.exe
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\vSupport Series.pdb
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\clipper_library.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\LeagueSharp.Common.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\LeagueSharp.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\SharpDX.Direct3D9.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\SharpDX.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\SPrediction.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\bin\Debug\LeagueSharp.Sandbox.dll
+C:\Users\dima\Desktop\vSeries\vSupportSeries\obj\Debug\vSupport Series.csprojResolveAssemblyReference.cache
+C:\Users\dima\Desktop\vSeries\vSupportSeries\obj\Debug\vSupport Series.exe
+C:\Users\dima\Desktop\vSeries\vSupportSeries\obj\Debug\vSupport Series.pdb

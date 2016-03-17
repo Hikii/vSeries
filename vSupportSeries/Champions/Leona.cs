@@ -86,6 +86,40 @@ namespace vSupport_Series.Champions
             Drawing.OnDraw += LeonaOnDraw;
             AntiGapcloser.OnEnemyGapcloser += LeonaOnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += LeonaOnInterruptableTarget;
+           // Obj_AI_Base.OnDoCast += OnDoCast;
+        }
+
+        // test version, works although need to finish essential stuff like filtering out certain objects, optimization, diffrenet situations, etc.
+        private static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (Q.IsReady() || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
+            {
+                var ward =
+                    ObjectManager
+                        .Get<Obj_AI_Base>(
+                        )
+                        .FirstOrDefault(
+                            x =>
+                                x.IsEnemy && x.IsVisible && x.Distance(Player) < Player.AttackRange + x.BoundingRadius + Player.BoundingRadius &&
+                                (x.Name.ToLower().Contains("ward") || x.Name.ToLower().Contains("sight") ||
+                                 x.Name.ToLower().Contains("vision"))); 
+
+                if (ward == null) return;
+
+                if (ward.Health == 3 || ward.Health == 2)
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, ward);
+                }
+                if (Orbwalking.IsAutoAttack(args.SData.Name) && (ward.Health == 2 || ward.Health == 1))
+                {
+                    Q.Cast();
+                }
+
+                if (Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, ward);
+                }
+            }
         }
 
         private static void LeonaOnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
