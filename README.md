@@ -1,8 +1,20 @@
-## LeagueSharp
-### My Assemblies for LeagueSharp
+## vSeries
+### My AIOs for LeagueSharp
 
-##### Current Assemblies: 
-- Azir
-
-##### Current AIOs: 
-- vSupportSeries
+##### SUPPORT AIO
+###### Current Champs Supported: 
+- Alistar
+- Blitzcrank
+- Fiddlesticks
+- Janna
+- Leona
+- Lux
+- Morgana
+- Nami
+- Nautilus
+- Sona
+- Soraka
+- Syndra
+- Taric
+- Thresh
+- Trundle
