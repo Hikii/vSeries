@@ -214,11 +214,6 @@ namespace vSupport_Series.Champions
                 return; 
             }
 
-            if (W.IsReady() && MenuCheck("nami.heal.self", Config) && Player.HealthPercent <= SliderCheck("nami.heal.self.percent", Config))
-            {
-                W.Cast(Player);
-            }
-
             if (W.IsReady() && !Player.IsDead && !Player.IsZombie)
             {
                 foreach (var ally in HeroManager.Allies.Where(x => x.Distance(Player.Position) < W.Range && !x.IsDead && !x.IsZombie))
