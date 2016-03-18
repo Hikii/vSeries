@@ -88,8 +88,7 @@ namespace vSupport_Series.Champions
             Interrupter2.OnInterruptableTarget += LeonaOnInterruptableTarget;
            // Obj_AI_Base.OnDoCast += OnDoCast;
         }
-
-        // test version, works although need to finish essential stuff like filtering out certain objects, optimization, diffrenet situations, etc.
+        
         private static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (Q.IsReady() || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
