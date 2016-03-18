@@ -14,6 +14,8 @@ namespace vSupport_Series.Champions
         public static Spell Q, W, E, R;
         public static Orbwalking.Orbwalker Orbwalker;
 
+        public static Obj_AI_Hero Player = ObjectManager.Player;
+
         public Nami()
         {
             NamiOnLoad();
@@ -28,7 +30,7 @@ namespace vSupport_Series.Champions
 
             Q.SetSkillshot(1f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.5f, 260f, 850f, false, SkillshotType.SkillshotLine);
-            Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
+            Config = new Menu("vSupport Series: " + Player.ChampionName, "vSupport Series", true);
             {
                 Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalker Settings"));
                 var comboMenu = new Menu("Combo Settings", "Combo Settings");
@@ -47,6 +49,9 @@ namespace vSupport_Series.Champions
                 var healMenu = new Menu("Heal Settings", "Heal Settings");
                 {
                     healMenu.AddItem(new MenuItem("nami.heal.disable", "Disable Heal?").SetValue(false));
+                    healMenu.AddItem(new MenuItem("nami.heal.mana", "Min. Mana to use Heal").SetValue(new Slider(20, 1, 99)));
+                    healMenu.AddItem(new MenuItem("nami.heal.self", "Heal self?").SetValue(true));
+                    healMenu.AddItem(new MenuItem("nami.heal.self.percent", "Min. HP to heal self").SetValue(new Slider(30, 1, 99)));
                     healMenu.AddItem(new MenuItem("ayrac1", "                  Heal Whitelist"));
                     foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(o => o.IsAlly))
                     {
@@ -66,6 +71,7 @@ namespace vSupport_Series.Champions
                 }
                 var esettings = new Menu("(E) Settings", "(E) Settings");
                 {
+                    esettings.AddItem(new MenuItem("e.mana", "Min. Mana to use (E)").SetValue(new Slider(20, 1, 99)));
                     esettings.AddItem(new MenuItem("ayrac2", "                  (E) Whitelist"));
                     foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(o => o.IsAlly && !o.IsMe))
                     {
@@ -101,9 +107,14 @@ namespace vSupport_Series.Champions
 
         private static void NamiAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
+            if (SliderCheck("e.mana", Config) <= Player.ManaPercent)
+            {
+                return;
+            }
+
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && MenuCheck("nami.e.combo",Config) && E.IsReady())
             {
-                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe && x.Distance(ObjectManager.Player.Position) < E.Range && !x.IsDead && !x.IsZombie))
+                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe && x.Distance(Player.Position) < E.Range && !x.IsDead && !x.IsZombie))
                 {
                     if (MenuCheck("ewhite." + ally.ChampionName,Config))
                     {
@@ -151,7 +162,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)))
                 {
-                    if (ObjectManager.Player.CountEnemiesInRange(R.Range) >= SliderCheck("nami.min.enemy.count",Config))
+                    if (Player.CountEnemiesInRange(R.Range) >= SliderCheck("nami.min.enemy.count",Config))
                     {
                         R.CastIfWillHit(enemy, SliderCheck("nami.min.enemy.count",Config));
                     }
@@ -161,7 +172,7 @@ namespace vSupport_Series.Champions
 
         private static void Harass()
         {
-            if (ObjectManager.Player.ManaPercent < SliderCheck("nami.harass.mana",Config))
+            if (Player.ManaPercent < SliderCheck("nami.harass.mana",Config))
             {
                 return;
             }
@@ -193,14 +204,24 @@ namespace vSupport_Series.Champions
                 return;
             }
 
-            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain())
+            if (SliderCheck("nami.heal.mana", Config) <= Player.ManaPercent)
+            {
+                return;
+            }
+
+            if (Player.IsRecalling() || Player.InFountain())
             {
                 return; 
             }
 
-            if (W.IsReady() && !ObjectManager.Player.IsDead && !ObjectManager.Player.IsZombie)
+            if (W.IsReady() && MenuCheck("nami.heal.self", Config) && Player.HealthPercent <= SliderCheck("nami.heal.self.percent", Config))
             {
-                foreach (var ally in HeroManager.Allies.Where(x => x.Distance(ObjectManager.Player.Position) < W.Range && !x.IsDead && !x.IsZombie))
+                W.Cast(Player);
+            }
+
+            if (W.IsReady() && !Player.IsDead && !Player.IsZombie)
+            {
+                foreach (var ally in HeroManager.Allies.Where(x => x.Distance(Player.Position) < W.Range && !x.IsDead && !x.IsZombie))
                 {
                     if (MenuCheck("heal." + ally.ChampionName, Config) && ally.HealthPercent < SliderCheck("heal.percent." + ally.ChampionName, Config))
                     {
@@ -214,19 +235,19 @@ namespace vSupport_Series.Champions
         {
             if (Q.IsReady() && ActiveCheck("nami.q.draw", Config))
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("nami.q.draw", Config));
+                Render.Circle.DrawCircle(Player.Position, Q.Range, GetColor("nami.q.draw", Config));
             }
             if (W.IsReady() && ActiveCheck("nami.w.draw", Config))
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("nami.w.draw", Config));
+                Render.Circle.DrawCircle(Player.Position, W.Range, GetColor("nami.w.draw", Config));
             }
             if (E.IsReady() && ActiveCheck("nami.e.draw", Config))
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("nami.e.draw", Config));
+                Render.Circle.DrawCircle(Player.Position, E.Range, GetColor("nami.e.draw", Config));
             }
             if (R.IsReady() && ActiveCheck("nami.r.draw", Config))
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("nami.r.draw", Config));
+                Render.Circle.DrawCircle(Player.Position, R.Range, GetColor("nami.r.draw", Config));
             }
         }
     }
