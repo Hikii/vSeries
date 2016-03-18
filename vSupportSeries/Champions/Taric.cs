@@ -45,11 +45,11 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(comboMenu);
                 }
 
-                var healManager = new Menu("(W) Heal Settings", "(W) Heal Settings");
+                var healManager = new Menu("(Q) Heal Settings", "(W) Heal Settings");
                 {
                     healManager.AddItem(new MenuItem("taric.heal.disable", "Disable Heal?").SetValue(false));
                     healManager.AddItem(new MenuItem("taric.heal.limit", "Min. Taric HP Percent for Heal").SetValue(new Slider(20, 1, 99)));
-                    healManager.AddItem(new MenuItem("blabla", "(W) Heal Settings"));
+                    healManager.AddItem(new MenuItem("blabla", "(Q) Heal Settings"));
 
                     foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(o => o.IsAlly && o.IsValid && !o.IsMe))
                     {
