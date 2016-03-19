@@ -166,6 +166,11 @@ namespace vSupport_Series.Champions
                 return;
             }
 
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.IsRecalling())
+            {
+                return;
+            }
+
             foreach (var heal in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
             {
                 if (MenuCheck("soraka.heal." + heal.ChampionName,Config) && heal.HealthPercent < SliderCheck("soraka.heal.percent." + heal.ChampionName,Config)
