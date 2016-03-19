@@ -52,6 +52,10 @@ namespace vSupport_Series
                     // ReSharper disable once ObjectCreationAsStatement
                     new Nautilus();
                     break;
+                case "Poppy":
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new Poppy();
+                    break;
                 case "Sona":
                     // ReSharper disable once ObjectCreationAsStatement
                     new Sona();

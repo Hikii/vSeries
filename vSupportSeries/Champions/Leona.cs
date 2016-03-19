@@ -89,7 +89,7 @@ namespace vSupport_Series.Champions
            // Obj_AI_Base.OnDoCast += OnDoCast;
         }
         
-        private static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        /*private static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (Q.IsReady() || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
             {
@@ -119,7 +119,7 @@ namespace vSupport_Series.Champions
                     Player.IssueOrder(GameObjectOrder.AttackUnit, ward);
                 }
             }
-        }
+        }*/
 
         private static void LeonaOnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
