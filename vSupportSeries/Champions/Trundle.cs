@@ -43,6 +43,14 @@ namespace vSupport_Series.Champions
                     comboMenu.AddItem(new MenuItem("trundle.r.combo", "Use R").SetValue(true));
                     comboMenu.AddItem(new MenuItem("trundle.r.slider", "If Trundle health > slider amount, cast (R)")).SetValue(new Slider(50, 1, 99));
                     Config.AddSubMenu(comboMenu);
+                    var rwhitelist = new Menu(":: (R) Whitelist", ":: (R) Whitelist");
+                    {
+                        foreach (var enemy in HeroManager.Enemies)
+                        {
+                            rwhitelist.AddItem(new MenuItem("trundle.r." + enemy.ChampionName, "(R): " + enemy.ChampionName).SetValue(true));
+                        }
+                        comboMenu.AddSubMenu(rwhitelist);
+                    }
                 }
 
                 var whitelist = new Menu(":: (R) Whitelist", ":: (R) Whitelist");
@@ -170,9 +178,9 @@ namespace vSupport_Series.Champions
                 }
             }
 
-            if (R.IsReady() && MenuCheck("trundle.r.combo", Config) && SliderCheck("trundle.r.slider",Config) > ObjectManager.Player.Health)
+            if (R.IsReady() && MenuCheck("trundle.r.combo", Config) && SliderCheck("trundle.r.slider", Config) > ObjectManager.Player.Health)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && MenuCheck("trundle.q." + x.ChampionName, Config)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && MenuCheck("trundle.r." + x.ChampionName, Config)))
                 {
                     R.Cast(enemy);
                 }
