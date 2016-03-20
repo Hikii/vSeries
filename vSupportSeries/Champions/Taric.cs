@@ -4,6 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using vSupport_Series.Core.Plugins;
 using Color = System.Drawing.Color;
+using Orbwalking = vSupport_Series.Core.Plugins.Orbwalking;
 
 namespace vSupport_Series.Champions
 {

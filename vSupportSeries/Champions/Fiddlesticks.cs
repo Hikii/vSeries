@@ -4,6 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using vSupport_Series.Core.Plugins;
 using Color = System.Drawing.Color;
+using Orbwalking = vSupport_Series.Core.Plugins.Orbwalking;
 
 namespace vSupport_Series.Champions
 {
@@ -11,7 +12,7 @@ namespace vSupport_Series.Champions
     {
         public static Menu Config;
         public static Spell Q, W, E, R;
-        public static Orbwalking.Orbwalker Orbwalker;
+        public static vSupport_Series.Core.Plugins.Orbwalking.Orbwalker Orbwalker;
         public static float LastW;
 
         public Fiddlesticks()

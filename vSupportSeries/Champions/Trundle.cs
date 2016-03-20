@@ -1,10 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using vSupport_Series.Core.Database;
 using vSupport_Series.Core.Plugins;
 using Color = System.Drawing.Color;
+using Orbwalking = vSupport_Series.Core.Plugins.Orbwalking;
 
 namespace vSupport_Series.Champions
 {
@@ -38,6 +41,7 @@ namespace vSupport_Series.Champions
                     comboMenu.AddItem(new MenuItem("trundle.w.combo", "Use Q").SetValue(true));
                     comboMenu.AddItem(new MenuItem("trundle.e.combo", "Use E").SetValue(true));
                     comboMenu.AddItem(new MenuItem("trundle.r.combo", "Use R").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("trundle.r.slider", "If Trundle health > slider amount, cast (R)")).SetValue(new Slider(50, 1, 99));
                     Config.AddSubMenu(comboMenu);
                 }
 
@@ -55,8 +59,17 @@ namespace vSupport_Series.Champions
                     harassMenu.AddItem(new MenuItem("trundle.q.harass", "Use Q").SetValue(true));
                     harassMenu.AddItem(new MenuItem("trundle.w.harass", "Use W").SetValue(true));
                     harassMenu.AddItem(new MenuItem("trundle.e.harass", "Use E").SetValue(true));
-                    harassMenu.AddItem(new MenuItem("trundle.harass.mana", "Min. Mana")).SetValue(new Slider(50,1,99));
+                    harassMenu.AddItem(new MenuItem("trundle.harass.mana", "Min. Mana")).SetValue(new Slider(50, 1, 99));
                     Config.AddSubMenu(harassMenu);
+                }
+
+                var trickMenu = new Menu(":: Trick Settings", ":: Trick Settings");
+                {
+                    foreach (var spell in HeroManager.Allies.SelectMany(ally => SpellDatabase.TrundleSpells.Where(p => p.ChampionName == ally.ChampionName)))
+                    {
+                        trickMenu.AddItem(new MenuItem(string.Format("trick.{0}", spell.SpellName), string.Format("Trick: {0} ({1})", spell.ChampionName, spell.Slot)).SetValue(true));
+                    }
+                    Config.AddSubMenu(trickMenu);
                 }
 
                 var drawing = new Menu("Draw Settings", "Draw Settings");
@@ -66,7 +79,7 @@ namespace vSupport_Series.Champions
                     drawing.AddItem(new MenuItem("trundle.e.draw", "E Range").SetValue(new Circle(true, Color.White)));
                     drawing.AddItem(new MenuItem("trundle.r.draw", "R Range").SetValue(new Circle(true, Color.SandyBrown)));
                     Config.AddSubMenu(drawing);
-                } 
+                }
                 Config.AddItem(new MenuItem("trundle.pillar.block", "Use (E) for Blitzcrank Q").SetValue(true));
                 Config.AddItem(new MenuItem("trundle.interrupter", "Interrupter").SetValue(true)).SetTooltip("Only cast if enemy spell priorty > danger");
             }
@@ -88,10 +101,27 @@ namespace vSupport_Series.Champions
 
         private static void TrundleOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsEnemy && args.End.Distance(ObjectManager.Player.Position) < 150 && args.SData.Name == "RocketGrab"
-                && sender.CharData.BaseSkinName == "Blitzcrank")
+            if (sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && sender is Obj_AI_Hero &&
+                ((Config.Item("trick." + args.SData.Name).GetValue<bool>() && Config.Item("trick." + args.SData.Name) != null)))
             {
-                E.Cast(ObjectManager.Player.Position.Extend(args.End, 100));
+                if (args.Target.IsMe)
+                {
+                    if (args.SData.Name == "CaitlynEntrapment" && args.End.Distance(ObjectManager.Player.Position) < E.Range - 50
+                        && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
+                    {
+                        E.Cast(args.End.Extend(ObjectManager.Player.Position, -50));
+                    }
+                    else if (args.SData.Name == "BlindMonkQOne" && ObjectManager.Player.HasBuff("BlindMonkQOne") && sender.HasBuff("lee sin q fly buff. just i need"))
+                    {
+                        E.Cast(ObjectManager.Player.Position.Extend(sender.Position, 100));
+                    }
+                }
+
+                if (args.SData.Name == "RocketJump" && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
+                {
+                    E.Cast(ObjectManager.Player.Position.Extend(args.End, 50));
+                }
+
             }
         }
 
@@ -114,7 +144,7 @@ namespace vSupport_Series.Champions
             if (Q.IsReady() && MenuCheck("trundle.q.combo", Config))
             {
                 // ReSharper disable once UnusedVariable
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast();
                 }
@@ -122,15 +152,15 @@ namespace vSupport_Series.Champions
 
             if (W.IsReady() && MenuCheck("trundle.w.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast(enemy);
                 }
             }
 
-            if (E.IsReady() && MenuCheck("trundle.e.combo",Config))
+            if (E.IsReady() && MenuCheck("trundle.e.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     var pred = E.GetPrediction(enemy);
                     if (pred.Hitchance >= HitChance.High)
@@ -140,7 +170,7 @@ namespace vSupport_Series.Champions
                 }
             }
 
-            if (R.IsReady() && MenuCheck("trundle.r.combo", Config))
+            if (R.IsReady() && MenuCheck("trundle.r.combo", Config) && SliderCheck("trundle.r.slider",Config) > ObjectManager.Player.Health)
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && MenuCheck("trundle.q." + x.ChampionName, Config)))
                 {
@@ -151,7 +181,7 @@ namespace vSupport_Series.Champions
 
         private static void Harass()
         {
-            if (ObjectManager.Player.ManaPercent <= SliderCheck("trundle.harass.mana",Config))
+            if (ObjectManager.Player.ManaPercent <= SliderCheck("trundle.harass.mana", Config))
             {
                 return;
             }
@@ -204,9 +234,9 @@ namespace vSupport_Series.Champions
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("trundle.r.draw", Config));
             }
-            foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(1000)))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1000)))
             {
-                Render.Circle.DrawCircle(PillarPos(enemy),50,Color.Gold);
+                Render.Circle.DrawCircle(PillarPos(enemy), 50, Color.Gold);
             }
         }
     }
