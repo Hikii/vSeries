@@ -59,12 +59,14 @@ namespace vSupport_Series.Champions
                 }
 
                 Config.AddItem(new MenuItem("poppy.interrupter", "Interrupter").SetValue(true)).SetTooltip("Only cast if enemy spell priorty > danger");
+                Config.AddItem(new MenuItem("poppy.gapcloser", "Gapcloser").SetValue(true));
             }
 
             Config.AddToMainMenu();
             Game.OnUpdate += PoppyOnUpdate;
             Drawing.OnDraw += PoppyOnDraw;
             Interrupter2.OnInterruptableTarget += PoppyInterrupter;
+            AntiGapcloser.OnEnemyGapcloser += PoppyOnEnemyGapcloser;
         }
 
         private static void PoppyInterrupter(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -78,6 +80,14 @@ namespace vSupport_Series.Champions
                 args.DangerLevel >= Interrupter2.DangerLevel.High && !E.IsReady())
             {
                 R.Cast(sender.Position);
+            }
+        }
+
+        private static void PoppyOnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (W.IsReady() && MenuCheck("poppy.gapcloser", Config) && gapcloser.Sender.IsValidTarget(W.Range))
+            {
+                W.Cast();
             }
         }
 
@@ -109,14 +119,6 @@ namespace vSupport_Series.Champions
 
         private static void Combo()
         {
-            if (Q.IsReady() && MenuCheck("poppy.q.combo", Config))
-            {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range)))
-                {
-                    Q.Cast(enemy);
-                }
-            }
-
             if (E.IsReady() && MenuCheck("poppy.e.combo", Config))
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
@@ -136,6 +138,14 @@ namespace vSupport_Series.Champions
                             E.Cast(enemy);
                         }
                     }
+                }
+            }
+
+            if (Q.IsReady() && MenuCheck("poppy.q.combo", Config))
+            {
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
+                {
+                    Q.Cast(enemy);
                 }
             }
         }

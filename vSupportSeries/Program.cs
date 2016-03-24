@@ -21,7 +21,8 @@ namespace vSupport_Series
                 case "Alistar":
                     // ReSharper disable once ObjectCreationAsStatement
                     new Alistar();
-                    
+                    new ActivatorBase();
+                    VersionCheck.UpdateCheck();
                     break;
                 case "Blitzcrank":
                     // ReSharper disable once ObjectCreationAsStatement
@@ -38,6 +39,12 @@ namespace vSupport_Series
                 case "Janna":
                     // ReSharper disable once ObjectCreationAsStatement
                     new Janna();
+                    new ActivatorBase();
+                    VersionCheck.UpdateCheck();
+                    break;
+                case "Karma":
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new Karma();
                     new ActivatorBase();
                     VersionCheck.UpdateCheck();
                     break;
