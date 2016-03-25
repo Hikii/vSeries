@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -35,45 +36,74 @@ namespace vSupport_Series.Champions
 
             Config = new Menu("vSupport Series:  " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {
-                Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalker Settings"));
+                Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu(":: Orbwalker Settings"));
 
-                var comboMenu = new Menu("Combo Settings", "Combo Settings");
+                var comboMenu = new Menu(":: Combo Settings", ":: Combo Settings");
                 {
                     comboMenu.AddItem(new MenuItem("karma.q.combo", "Use Q").SetValue(true));
                     comboMenu.AddItem(new MenuItem("karma.w.combo", "Use W").SetValue(true));
-                    comboMenu.AddItem(new MenuItem("karma.e.combo", "Use E").SetValue(true));
-                    var esettings = new Menu(":: E Settings", ":: E Settings");
-                    {
-                        esettings.AddItem(new MenuItem("combo.e.ally", "Shield is Ally HP").SetValue(new Slider(40, 1, 99)));
-                        esettings.AddItem(new MenuItem("combo.e.self", "Shield is Player HP").SetValue(new Slider(30, 1, 99)));
-                    }
                     comboMenu.AddItem(new MenuItem("karma.r.combo", "Use R").SetValue(true));
-                    
-                    var rsettings = new Menu(":: R Settings", ":: R Settings");
+                    var comborsettings = new Menu(":: R Settings", ":: R Settings");
                     {
-                        rsettings.AddItem(new MenuItem("combo.r.q", "Empower Q?").SetValue(true));
-                        rsettings.AddItem(new MenuItem("combo.r.w", "Empower W?").SetValue(true));
-                        rsettings.AddItem(new MenuItem("combo.r.w.health", "Min. Health to Empower W").SetValue(new Slider(40, 1, 99)));
-                        rsettings.AddItem(new MenuItem("combo.r.e", "Empower E?").SetValue(true));
-                        rsettings.AddItem(new MenuItem("combo.r.e.allies", "Min. Allies in Range to Shield").SetValue(new Slider(3, 1, 5)));
-                        
-                        comboMenu.AddSubMenu(rsettings);
+                        comborsettings.AddItem(new MenuItem("combo.r.q", "Empower Q?").SetValue(true));
+                        comborsettings.AddItem(new MenuItem("combo.r.w", "Empower W?").SetValue(true));
+                        comborsettings.AddItem(new MenuItem("combo.r.w.health", "Min. Health to Empower W").SetValue(new Slider(40, 1, 99)));
+
+                        comboMenu.AddSubMenu(comborsettings);
                     }
 
                     Config.AddSubMenu(comboMenu);
                 }
 
-                var harass = new Menu("Harass Settings", "Harass Settings");
+                var healManager = new Menu("(E) Shield Settings", "(E) Shield Settings");
+                {
+                    healManager.AddItem(new MenuItem("karma.shield.disable", "Disable shielding?").SetValue(false));
+                    healManager.AddItem(new MenuItem("karma.shield.limit", "Min. Karma HP Percent for Shield").SetValue(new Slider(40, 1, 99)));
+                    healManager.AddItem(new MenuItem("blabla", "(W) Shield Settings"));
+
+                    var wsettings = new Menu("(E) Priority", "(E) Priority").SetFontStyle(FontStyle.Bold, SharpDX.Color.Gold);
+                    {
+                        foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(o => o.IsAlly && o.IsValid && !o.IsMe))
+                        {
+                            if (LowPriority.Contains(ally.ChampionName))
+                            {
+                                wsettings.AddItem(new MenuItem("karma.shield" + ally.ChampionName, "Heal: " + ally.ChampionName).SetValue(true));
+                                wsettings.AddItem(new MenuItem("karma.shield.percent" + ally.ChampionName, "Min. " + ally.ChampionName + " HP Percent").SetValue(new Slider(15, 1, 99)));
+                            }
+                            if (MediumPriority.Contains(ally.ChampionName))
+                            {
+                                wsettings.AddItem(new MenuItem("karma.shield" + ally.ChampionName, "Heal: " + ally.ChampionName).SetValue(true));
+                                wsettings.AddItem(new MenuItem("karma.shield.percent" + ally.ChampionName, "Min. " + ally.ChampionName + " HP Percent").SetValue(new Slider(20, 1, 99)));
+                            }
+                            if (HighChamps.Contains(ally.ChampionName))
+                            {
+                                wsettings.AddItem(new MenuItem("karma.shield" + ally.ChampionName, "Heal: " + ally.ChampionName).SetValue(true));
+                                wsettings.AddItem(new MenuItem("karma.shield.percent" + ally.ChampionName, "Min. " + ally.ChampionName + " HP Percent").SetValue(new Slider(30, 1, 99)));
+                            }
+                        }
+                        healManager.AddSubMenu(wsettings);
+                    }
+                    Config.AddSubMenu(healManager);
+                }
+
+                var harass = new Menu(":: Harass Settings", ":: Harass Settings");
                 {
                     harass.AddItem(new MenuItem("karma.q.harass", "Use Q").SetValue(true));
-                    harass.AddItem(new MenuItem("karma.rq.harass", "Empower R?").SetValue(true));
-                    harass.AddItem(new MenuItem("karma.e.harass", "Use E").SetValue(true));
+                    harass.AddItem(new MenuItem("karma.w.harass", "Use W").SetValue(true));
+                    var harassrsettings = new Menu(":: R Settings", ":: R Settings");
+                    {
+                        harassrsettings.AddItem(new MenuItem("karma.rq.harass", "Empower Q?").SetValue(true));
+                        harassrsettings.AddItem(new MenuItem("karma.rw.harass", "Empower W?").SetValue(true));
+                        harassrsettings.AddItem(new MenuItem("karma.rw.health", "Min. Health to Empower W").SetValue(new Slider(40, 1, 99)));
+
+                        harass.AddSubMenu(harassrsettings);
+                    }
                     harass.AddItem(new MenuItem("karma.harass.mana", "Min. Mana Percent").SetValue(new Slider(50, 1, 99)));
 
                     Config.AddSubMenu(harass);
                 }
 
-                var misc = new Menu("Miscellaneous", "Miscellaneous");
+                var misc = new Menu(":: Miscellaneous", ":: Miscellaneous");
                 {
                     misc.AddItem(new MenuItem("karma.anti.q", "Gapcloser (Q)").SetValue(true));
                     misc.AddItem(new MenuItem("karma.anti.e", "Gapcloser (E)").SetValue(true));
@@ -81,7 +111,7 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(misc);
                 }
 
-                var drawing = new Menu("Draw Settings", "Draw Settings");
+                var drawing = new Menu(":: Draw Settings", ":: Draw Settings");
                 {
                     drawing.AddItem(new MenuItem("karma.q.draw", "Q Range").SetValue(new Circle(true, Color.Chartreuse)));
                     drawing.AddItem(new MenuItem("karma.w.draw", "W Range").SetValue(new Circle(true, Color.Yellow)));
@@ -90,7 +120,7 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(drawing);
                 }
 
-                Config.AddItem(new MenuItem("karma.q.hitchance", "Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
+                Config.AddItem(new MenuItem("karma.q.hitchance", ":: Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
             }
 
             SPrediction.Prediction.Initialize(Config, ":: Prediction Settings");
@@ -125,53 +155,47 @@ namespace vSupport_Series.Champions
             }
         }
 
-        private static void Combo()
+        private static void EManager()
         {
-            if (MenuCheck("karma.e.combo", Config) && E.IsReady())
+            if (ObjectManager.Player.IsDead && ObjectManager.Player.IsZombie)
             {
-                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
+                return;
+            }
+
+            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe && !x.IsDead
+                && x.Distance(ObjectManager.Player.Position) < E.Range))
+            {
+                if (MenuCheck("karma.shield" + ally.ChampionName, Config) && ally.HealthPercent < SliderCheck("karma.ally.percent" + ally.ChampionName, Config)
+                    && ObjectManager.Player.HealthPercent > SliderCheck("karma.ally.limit", Config))
                 {
-                    if (MenuCheck("combo.r.e", Config) && R.IsReady())
-                    {
-                        if (Player.CountAlliesInRange(E.Range) > SliderCheck("combo.r.e.allies", Config))
-                        {
-                            R.Cast();
-                            E.CastOnUnit(Player);
-                        }
-                    }
-                    else if (!MenuCheck("combo.r.e", Config))
-                    {
-                        if (ally.HealthPercent <= SliderCheck("combo.e.ally", Config))
-                        {
-                            E.CastOnUnit(ally);
-                        }
-                        
-                        if (Player.HealthPercent <= SliderCheck("combo.e.self", Config))
-                        {
-                            E.CastOnUnit(Player);
-                        }
-                    }
+                    E.Cast(ally);
                 }
             }
-            else if (MenuCheck("karma.w.combo", Config) && W.IsReady())
+        }
+
+        private static void Combo()
+        {
+            if (MenuCheck("karma.w.combo", Config) && W.IsReady())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     if (MenuCheck("combo.r.w", Config) && R.IsReady())
                     {
-                        if (ObjectManager.Player.HealthPercent <= SliderCheck("combo.w.e.health", Config))
+                        if (ObjectManager.Player.HealthPercent <= SliderCheck("combo.r.w.health", Config))
                         {
                             R.Cast();
-                            W.CastOnUnit(enemy);
+                            W.Cast(enemy);
                         }
                     }
-                    else if (!MenuCheck("combo.r.w", Config))
+
+                    if (!MenuCheck("combo.r.w", Config) || !R.IsReady())
                     {
-                        W.CastOnUnit(enemy);
+                        W.Cast(enemy);
                     }
                 }
             }
-            else if (MenuCheck("karma.q.combo", Config) && Q.IsReady())
+
+            if (MenuCheck("karma.q.combo", Config) && Q.IsReady())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
@@ -180,7 +204,8 @@ namespace vSupport_Series.Champions
                         R.Cast();
                         Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                     }
-                    else if (!MenuCheck("combo.r.q", Config))
+
+                    if (!MenuCheck("combo.r.q", Config) || !R.IsReady())
                     {
                         Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                     }
@@ -190,28 +215,36 @@ namespace vSupport_Series.Champions
 
         private static void Harass()
         {
-            if (MenuCheck("karma.rq.harass", Config) && Q.IsReady() && R.IsReady())
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
+                if (MenuCheck("karma.rw.harass", Config) && W.IsReady() && R.IsReady())
+                {
+                    if (ObjectManager.Player.HealthPercent <= SliderCheck("harass.rw.health", Config))
+                    {
+                        R.Cast();
+                        W.Cast(enemy);
+                    }
+                }
+
+                if (!MenuCheck("karma.rw.harass", Config) || !R.IsReady())
+                {
+                    W.Cast(enemy);
+                }
+            }
+
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
+            {
+                if (MenuCheck("karma.rq.harass", Config) && Q.IsReady() && R.IsReady())
                 {
                     R.Cast();
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                 }
-            }
-            else if (MenuCheck("karma.q.harass", Config) && Q.IsReady())
-            {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
+
+                if (MenuCheck("karma.q.harass", Config) && Q.IsReady())
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                 }
-            }
 
-            if (MenuCheck("karma.w.harass", Config) && W.IsReady())
-            {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
-                {
-                    W.CastOnUnit(enemy);
-                }
             }
         }
 
