@@ -94,7 +94,7 @@ namespace vSupport_Series.Champions
                 var misc = new Menu("Miscellaneous", "Miscellaneous");
                 {
                     misc.AddItem(new MenuItem("sona.anti", "Gapcloser (Q)").SetValue(true));
-                    misc.AddItem(new MenuItem("sona.inter", "Interrupt (E)").SetValue(true));
+                    misc.AddItem(new MenuItem("sona.inter", "Interrupt (R)").SetValue(true));
 
                     Config.AddSubMenu(misc);
                 }
