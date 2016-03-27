@@ -167,6 +167,11 @@ namespace vSupport_Series.Champions
                 return;
             }
 
+            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain())
+            {
+                return;
+            }
+
             foreach (var shield in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe && !x.IsDead 
                 && x.Distance(ObjectManager.Player.Position) < W.Range))
             {
