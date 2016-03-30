@@ -153,6 +153,8 @@ namespace vSupport_Series.Champions
                     Harass();
                     break;
             }
+            
+            EManager();
         }
 
         private static void EManager()
