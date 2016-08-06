@@ -22,12 +22,14 @@ namespace vSupport_Series.Champions
 
         public static void PoppyOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 550f);
-            W = new Spell(SpellSlot.W, 900f);
-            E = new Spell(SpellSlot.E, 1000f);
-            R = new Spell(SpellSlot.R, 1000f);
+            Q = new Spell(SpellSlot.Q, 430f);
+            W = new Spell(SpellSlot.W, 400f);
+            E = new Spell(SpellSlot.E, 425f);
+            R = new Spell(SpellSlot.R, Orbwalking.GetRealAutoAttackRange(null));
 
-            E.SetSkillshot(0.5f, 188f, 1600f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.SkillshotLine);
+            E.SetTargetted(0.25f, float.MaxValue);
+            R.SetSkillshot(0.25f, 60, float.MaxValue, false, SkillshotType.SkillshotLine);
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {

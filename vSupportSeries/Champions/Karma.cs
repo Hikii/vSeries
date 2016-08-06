@@ -26,12 +26,12 @@ namespace vSupport_Series.Champions
         public static void KarmaOnLoad()
         {
             Q = new Spell(SpellSlot.Q, 950f);
-            W = new Spell(SpellSlot.W, 700f);
+            W = new Spell(SpellSlot.W, 675f);
             E = new Spell(SpellSlot.E, 800f);
             R = new Spell(SpellSlot.R);
 
-            E.SetSkillshot(0.25f, 60f, 1700f, true, SkillshotType.SkillshotLine);
-            W.SetTargetted(0.25f, 2200f);
+            Q.SetSkillshot(0.25f, 60f, 1700f, true, SkillshotType.SkillshotLine);
+            W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, float.MaxValue);
 
             Config = new Menu("vSupport Series:  " + ObjectManager.Player.ChampionName, "vSupport Series", true);

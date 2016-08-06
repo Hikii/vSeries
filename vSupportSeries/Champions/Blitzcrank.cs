@@ -22,12 +22,12 @@ namespace vSupport_Series.Champions
 
         private static void BlitzcrankOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 950f);
+            Q = new Spell(SpellSlot.Q, 925f);
             W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 155f);
-            R = new Spell(SpellSlot.R, 545f);
+            E = new Spell(SpellSlot.E, Orbwalking.GetRealAutoAttackRange(null));
+            R = new Spell(SpellSlot.R, 600f);
 
-            Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 70f, 1750f, true, SkillshotType.SkillshotLine);
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {

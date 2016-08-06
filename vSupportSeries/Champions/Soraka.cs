@@ -22,12 +22,12 @@ namespace vSupport_Series.Champions
 
         public static void SorakaOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 550f);
-            W = new Spell(SpellSlot.W, 900f);
-            E = new Spell(SpellSlot.E, 1000f);
-            R = new Spell(SpellSlot.R, 1000f);
+            Q = new Spell(SpellSlot.Q, 800f);
+            W = new Spell(SpellSlot.W, 550f);
+            E = new Spell(SpellSlot.E, 925f);
+            R = new Spell(SpellSlot.R);
 
-            E.SetSkillshot(0.5f, 188f, 1600f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.5f, 235f, 1600f, false, SkillshotType.SkillshotCircle);
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {

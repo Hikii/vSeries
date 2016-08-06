@@ -30,7 +30,7 @@ namespace vSupport_Series.Champions
         }
         private static void FiddlestickOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 575);
+            Q = new Spell(SpellSlot.Q, 525);
             W = new Spell(SpellSlot.W, 575);
             E = new Spell(SpellSlot.E, 750);
             R = new Spell(SpellSlot.R, 800);

@@ -29,12 +29,12 @@ namespace vSupport_Series.Champions
                 return;
             }
 
-            Q = new Spell(SpellSlot.Q, 850);
-            W = new Spell(SpellSlot.W, 600);
-            E = new Spell(SpellSlot.E, 800);
-            R = new Spell(SpellSlot.R, 550);
+            Q = new Spell(SpellSlot.Q, 1175f);
+            W = new Spell(SpellSlot.W, 900f);
+            E = new Spell(SpellSlot.E, 750f);
+            R = new Spell(SpellSlot.R, 600f);
 
-            Q.SetSkillshot(0.25f, 120f, 900f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 70f, 1200f, false, SkillshotType.SkillshotLine);
 
             SpellDatabase.InitalizeSpellDatabase();
 

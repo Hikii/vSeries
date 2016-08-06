@@ -27,12 +27,13 @@ namespace vSupport_Series.Champions
         {
             Q = new Spell(SpellSlot.Q, 1175f);
             W = new Spell(SpellSlot.W, 1075f);
-            E = new Spell(SpellSlot.E, 1000f);
+            E = new Spell(SpellSlot.E, 1100f);
             R = new Spell(SpellSlot.R, 3340f);
 
             Q.SetSkillshot(0.25f, 70f, 1200f, false, SkillshotType.SkillshotLine);
+            W.SetSkillshot(0.25f, 70f, 1400f, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 275f, 1300f, false, SkillshotType.SkillshotCircle);
-            R.SetSkillshot(1f, 190f, int.MaxValue, false, SkillshotType.SkillshotCircle);
+            R.SetSkillshot(1f, 190f, float.MaxValue, false, SkillshotType.SkillshotLine);
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {
