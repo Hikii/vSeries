@@ -8,12 +8,17 @@
 - Janna
 - Leona
 - Lux
+- Nami
+- Nautilus
+- Poppy
+- Karma
 - Morgana
 - Nami
 - Nautilus
 - Sona
 - Soraka
 - Syndra
-- Taric
+- Taric (Not Updated Yet)
+- Tahm Kench
 - Thresh
 - Trundle
