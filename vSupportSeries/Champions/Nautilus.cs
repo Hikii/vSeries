@@ -22,10 +22,10 @@ namespace vSupport_Series.Champions
 
         private static void NautilusOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 900);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 550);
-            R = new Spell(SpellSlot.R, 755);
+            Q = new Spell(SpellSlot.Q, 1100f);
+            W = new Spell(SpellSlot.W, 175f);
+            E = new Spell(SpellSlot.E, 600f);
+            R = new Spell(SpellSlot.R, 825f);
 
             Q.SetSkillshot(0.25f, 90f, 2000f, true, SkillshotType.SkillshotLine);
 

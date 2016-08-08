@@ -28,7 +28,7 @@ namespace vSupport_Series.Champions
             Q = new Spell(SpellSlot.Q, 850f);
             W = new Spell(SpellSlot.W, 1000f);
             E = new Spell(SpellSlot.E, 350f);
-            R = new Spell(SpellSlot.R, 1000f);
+            R = new Spell(SpellSlot.R, 900f);
 
             R.SetSkillshot(0.5f, 125, 3000f, false, SkillshotType.SkillshotLine);
 

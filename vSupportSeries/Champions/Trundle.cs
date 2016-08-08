@@ -24,7 +24,7 @@ namespace vSupport_Series.Champions
 
         public static void TrundleOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 550f);
+            Q = new Spell(SpellSlot.Q, Orbwalking.GetRealAutoAttackRange(null));
             W = new Spell(SpellSlot.W, 900f);
             E = new Spell(SpellSlot.E, 1000f);
             R = new Spell(SpellSlot.R, 1000f);

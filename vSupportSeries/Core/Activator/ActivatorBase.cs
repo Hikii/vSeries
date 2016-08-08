@@ -198,15 +198,15 @@ namespace vSupport_Series.Core.Activator
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.HasBuff("zedulttargetmark") && Helper.MenuCheck("mikael.zed", _config))
+                    /*else if (ally.HasBuff("zedulttargetmark") && Helper.MenuCheck("mikael.zed", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
-                    }
+                    }*/
                     else if (ally.HasBuff("FizzMarinerDoom") && Helper.MenuCheck("mikael.fizz", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.HasBuff("AlZaharNetherGrasp") && Helper.MenuCheck("mikael.malzahar", _config))
+                    else if ((ally.HasBuff("AlZaharNetherGrasp") || ally.HasBuff("MalzaharR")) && Helper.MenuCheck("mikael.malzahar", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
@@ -214,10 +214,10 @@ namespace vSupport_Series.Core.Activator
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.HasBuff("summonerexhaust") && Helper.MenuCheck("mikael.exhaust", _config))
+                    /*else if (ally.HasBuff("summonerexhaust") && Helper.MenuCheck("mikael.exhaust", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
-                    }
+                    }*/
                     /*classical buffs*/
                     else if (ally.HasBuffOfType(BuffType.Charm) && Helper.MenuCheck("mikael.charm", _config))
                     {

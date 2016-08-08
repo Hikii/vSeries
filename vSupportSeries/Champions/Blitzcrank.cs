@@ -22,12 +22,12 @@ namespace vSupport_Series.Champions
 
         private static void BlitzcrankOnLoad()
         {
-            Q = new Spell(SpellSlot.Q, 950f);
+            Q = new Spell(SpellSlot.Q, 925f);
             W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 155f);
-            R = new Spell(SpellSlot.R, 545f);
+            E = new Spell(SpellSlot.E, Orbwalking.GetRealAutoAttackRange(null));
+            R = new Spell(SpellSlot.R, 600f);
 
-            Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 70f, 1750f, true, SkillshotType.SkillshotLine);
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {
@@ -61,9 +61,20 @@ namespace vSupport_Series.Champions
                     drawing.AddItem(new MenuItem("blitzcrank.r.draw", "R Range").SetValue(new Circle(true, Color.SandyBrown)));
                     Config.AddSubMenu(drawing);
                 }
-                SPrediction.Prediction.Initialize(Config, ":: Prediction Settings");
                 Config.AddItem(new MenuItem("blitzcrank.interrupter", "Interrupter").SetValue(true)).SetTooltip("Only cast if enemy spell priorty > danger");
                 Config.AddItem(new MenuItem("blitzcrank.q.hitchance", "Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
+                
+
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction"}, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
             }
             Config.AddToMainMenu();
             Game.OnUpdate += BlitzcrankOnUpdate;
@@ -101,7 +112,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("blitzcrank.q."+x.ChampionName,Config)))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "blitzcrank.q.hitchance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "blitzcrank.q.hitchance"),"prediction",Config);
                 }
             }
 

@@ -25,12 +25,12 @@ namespace vSupport_Series.Champions
         public static void LeonaOnLoad()
         {
             Q = new Spell(SpellSlot.Q, Orbwalking.GetRealAutoAttackRange(Player) + 100);
-            W = new Spell(SpellSlot.W, 200f);
-            E = new Spell(SpellSlot.E, 700f);
+            W = new Spell(SpellSlot.W, 275f);
+            E = new Spell(SpellSlot.E, 875f);
             R = new Spell(SpellSlot.R, 1200f);
 
-            E.SetSkillshot(0.25f, 120f, 2000f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(1f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 70f, 2000f, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(0.75f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             Config = new Menu("vSupport Series:  " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {
@@ -89,7 +89,11 @@ namespace vSupport_Series.Champions
             Interrupter2.OnInterruptableTarget += LeonaOnInterruptableTarget;
            // Obj_AI_Base.OnDoCast += OnDoCast;
         }
-        
+        /// <summary>
+        /// To be done, Oneshot the ward
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         /*private static void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (Q.IsReady() || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
@@ -128,7 +132,7 @@ namespace vSupport_Series.Champions
             {
                 Q.CastIfHitchanceEquals(sender, HitChance.High);
             }
-            else if (E.IsReady() && sender.IsValidTarget(700) && MenuCheck("leona.inter", Config))
+            else if (E.IsReady() && sender.IsValidTarget(E.Range) && MenuCheck("leona.inter", Config))
             {
                 E.CastIfHitchanceEquals(sender, HitChance.High);
             }
@@ -141,7 +145,7 @@ namespace vSupport_Series.Champions
                 Q.Cast(gapcloser.Sender);
             }
             else if (E.IsReady() && MenuCheck("leona.anti", Config) && E.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
-                && gapcloser.Sender.IsValidTarget(700))
+                && gapcloser.Sender.IsValidTarget(E.Range))
             {
                 E.Cast(gapcloser.Sender);
             }
