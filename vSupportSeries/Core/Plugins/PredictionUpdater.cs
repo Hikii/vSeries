@@ -75,7 +75,14 @@ namespace vSupport_Series.Core.Plugins
                     break;
             }
         }
-
+        /// <summary>
+        /// skill cast
+        /// </summary>
+        /// <param name="spell">spell</param>
+        /// <param name="unit">enemy</param>
+        /// <param name="hit">hitchance</param>
+        /// <param name="menuitemname"> menu item name </param>
+        /// <param name="menuname"> and menu name like a "Config" </param>
         public static void vCast(this Spell spell, Obj_AI_Base unit, HitChance hit, string menuitemname, Menu menuname)
         {
             switch (menuname.Item(menuitemname).GetValue<StringList>().SelectedIndex)
