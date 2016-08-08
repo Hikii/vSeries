@@ -73,11 +73,11 @@ namespace vSupport_Series.Champions
 
                 var trickMenu = new Menu(":: Trick Settings", ":: Trick Settings");
                 {
-                    foreach (var spell in HeroManager.Allies.SelectMany(ally => SpellDatabase.TrundleSpells.Where(p => p.ChampionName == ally.ChampionName)))
+                    /*foreach (var spell in HeroManager.Allies.SelectMany(ally => SpellDatabase.TrundleSpells.Where(p => p.ChampionName == ally.ChampionName)))
                     {
                         trickMenu.AddItem(new MenuItem(string.Format("trick.{0}", spell.SpellName), string.Format("Trick: {0} ({1})", spell.ChampionName, spell.Slot)).SetValue(true));
                     }
-                    Config.AddSubMenu(trickMenu);
+                    Config.AddSubMenu(trickMenu);*/
                 }
 
                 var drawing = new Menu("Draw Settings", "Draw Settings");
