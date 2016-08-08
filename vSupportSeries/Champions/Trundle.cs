@@ -109,10 +109,9 @@ namespace vSupport_Series.Champions
 
         private static void TrundleOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && sender is Obj_AI_Hero &&
-                ((Config.Item("trick." + args.SData.Name).GetValue<bool>() && Config.Item("trick." + args.SData.Name) != null)))
+            if (sender.IsEnemy && sender.IsChampion()) /*(Config.Item("trick." + args.SData.Name).GetValue<bool>() && Config.Item("trick." + args.SData.Name) != null))*/
             {
-                if (args.Target.IsMe)
+                /*if (args.Target.IsMe)
                 {
                     if (args.SData.Name == "CaitlynEntrapment" && args.End.Distance(ObjectManager.Player.Position) < E.Range - 50
                         && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
@@ -128,8 +127,7 @@ namespace vSupport_Series.Champions
                 if (args.SData.Name == "RocketJump" && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
                 {
                     E.Cast(ObjectManager.Player.Position.Extend(args.End, 50));
-                }
-
+                }*/
             }
         }
 
