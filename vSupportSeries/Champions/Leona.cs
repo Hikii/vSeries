@@ -79,6 +79,16 @@ namespace vSupport_Series.Champions
                 }
 
                 Config.AddItem(new MenuItem("leona.hitchance", "Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
             }
 
             SPrediction.Prediction.Initialize(Config, ":: Prediction Settings");
@@ -186,7 +196,8 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    E.SPredictionCast(enemy, SpellHitChance(Config, "leona.hitchance"));
+                    //E.SPredictionCast(enemy, SpellHitChance(Config, "leona.hitchance"));
+                    E.vCast(enemy, SpellHitChance(Config, "leona.hitchance"), "prediction", Config);
                 }
             }
 
@@ -226,7 +237,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
-                    E.SPredictionCast(enemy, SpellHitChance(Config, "leona.hitchance"));
+                    E.vCast(enemy, SpellHitChance(Config, "leona.hitchance"), "prediction", Config);
                 }
             }
         }

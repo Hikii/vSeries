@@ -113,6 +113,17 @@ namespace vSupport_Series.Champions
                 }
 
                 Config.AddItem(new MenuItem("lux.hitchance", "Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
+
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
             }
 
             SPrediction.Prediction.Initialize(Config, ":: Prediction Settings");
@@ -210,7 +221,7 @@ namespace vSupport_Series.Champions
                 {
                     if (R.GetDamage(target) > target.Health)
                     {
-                        R.SPredictionCast(target, SpellHitChance(Config, "lux.hitchance"));
+                        R.vCast(target, SpellHitChance(Config, "lux.hitchance"), "prediction", Config);
                     }    
                 }
             }
@@ -222,7 +233,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "lux.hitchance"), "prediction", Config);
                 }
             }
 
@@ -230,7 +241,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    E.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
+                    E.vCast(enemy, SpellHitChance(Config, "lux.hitchance"), "prediction", Config);
                 }
             }
 
@@ -238,7 +249,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    R.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
+                    R.vCast(enemy, SpellHitChance(Config, "lux.hitchance"), "prediction", Config);
                 }
             }
         }
@@ -254,7 +265,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "lux.hitchance"), "prediction", Config);
                 }
             }
 
@@ -262,7 +273,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
-                    E.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
+                    E.vCast(enemy, SpellHitChance(Config, "lux.hitchance"), "prediction", Config);
                 }
             }
         }

@@ -197,6 +197,16 @@ namespace vSupport_Series.Champions
                     drawMenu.AddItem(new MenuItem("r.draw", "(R) Range").SetValue(new Circle(false, Color.Lime)));
                     Config.AddSubMenu(drawMenu);
                 }
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
                 Config.AddToMainMenu();
             }
             SPrediction.Prediction.Initialize(Config);
@@ -251,7 +261,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= SpellHitChance(Config,"q.hit.chance")))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "q.hit.chance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "q.hit.chance"), "prediction", Config);
                 }
             }
             if (W.IsReady() && Config.Item("w.combo").GetValue<bool>())
@@ -311,7 +321,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "q.hit.chance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "q.hit.chance"), "prediction", Config);
                 }
             }
             if (W.IsReady() && Config.Item("w.harass").GetValue<bool>())
@@ -437,10 +447,9 @@ namespace vSupport_Series.Champions
 
                 if (Q.IsReady() && Config.Item("q.toggle").GetValue<bool>())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) &&
-                        Q.GetSPrediction(x).HitChance >= SpellHitChance(Config, "toggle.hit.chance")))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                     {
-                        Q.SPredictionCast(enemy, SpellHitChance(Config, "toggle.hit.chance"));
+                        Q.vCast(enemy, SpellHitChance(Config, "toggle.hit.chance"), "prediction", Config);
                     }
                 }
             }

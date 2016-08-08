@@ -90,6 +90,16 @@ namespace vSupport_Series.Champions
                 }
 
                 Config.AddItem(new MenuItem("tahm.hitchance", "Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
             }
 
             SPrediction.Prediction.Initialize(Config, ":: Prediction Settings");
@@ -137,7 +147,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "tahm.hitchance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "q.hit.chance"), "prediction", Config);
                 }
             }
 

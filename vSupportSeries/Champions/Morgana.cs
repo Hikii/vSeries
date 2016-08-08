@@ -127,7 +127,16 @@ namespace vSupport_Series.Champions
                     drawing.AddItem(new MenuItem("morgana.r.draw", "R Range").SetValue(new Circle(true, Color.SandyBrown)));
                     Config.AddSubMenu(drawing);
                 }
-
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
                 Config.AddToMainMenu();
             }
 
@@ -213,7 +222,7 @@ namespace vSupport_Series.Champions
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) &&
                     MenuCheck("nautilus.q." + x.ChampionName, Config)))
                 {
-                    Q.SPredictionCast(enemy, SpellHitChance(Config, "morgana.q.hitchance"));
+                    Q.vCast(enemy, SpellHitChance(Config, "morgana.q.hitchance"), "prediction", Config);
                 }
             }
 
