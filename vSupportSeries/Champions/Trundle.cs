@@ -73,11 +73,11 @@ namespace vSupport_Series.Champions
 
                 var trickMenu = new Menu(":: Trick Settings", ":: Trick Settings");
                 {
-                    foreach (var spell in HeroManager.Allies.SelectMany(ally => SpellDatabase.TrundleSpells.Where(p => p.ChampionName == ally.ChampionName)))
+                    /*foreach (var spell in HeroManager.Allies.SelectMany(ally => SpellDatabase.TrundleSpells.Where(p => p.ChampionName == ally.ChampionName)))
                     {
                         trickMenu.AddItem(new MenuItem(string.Format("trick.{0}", spell.SpellName), string.Format("Trick: {0} ({1})", spell.ChampionName, spell.Slot)).SetValue(true));
                     }
-                    Config.AddSubMenu(trickMenu);
+                    Config.AddSubMenu(trickMenu);*/
                 }
 
                 var drawing = new Menu("Draw Settings", "Draw Settings");
@@ -109,10 +109,9 @@ namespace vSupport_Series.Champions
 
         private static void TrundleOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && sender is Obj_AI_Hero &&
-                ((Config.Item("trick." + args.SData.Name).GetValue<bool>() && Config.Item("trick." + args.SData.Name) != null)))
+            if (sender.IsEnemy && sender.IsChampion()) /*(Config.Item("trick." + args.SData.Name).GetValue<bool>() && Config.Item("trick." + args.SData.Name) != null))*/
             {
-                if (args.Target.IsMe)
+                /*if (args.Target.IsMe)
                 {
                     if (args.SData.Name == "CaitlynEntrapment" && args.End.Distance(ObjectManager.Player.Position) < E.Range - 50
                         && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
@@ -128,8 +127,7 @@ namespace vSupport_Series.Champions
                 if (args.SData.Name == "RocketJump" && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
                 {
                     E.Cast(ObjectManager.Player.Position.Extend(args.End, 50));
-                }
-
+                }*/
             }
         }
 
