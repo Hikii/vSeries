@@ -102,12 +102,6 @@ namespace vSupport_Series
                     new ActivatorBase();
                     VersionCheck.UpdateCheck();
                     break;
-                case "Taric":
-
-                    new Taric();
-                    new ActivatorBase();
-                    VersionCheck.UpdateCheck();
-                    break;
                 case "Thresh":
 
                     new Thresh();

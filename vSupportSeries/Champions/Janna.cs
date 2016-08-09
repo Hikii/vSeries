@@ -70,18 +70,6 @@ namespace vSupport_Series.Champions
                     qsettings.AddItem(new MenuItem("q.hit.x.chance.info.1", "                        :: Information ::").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(qsettings.Item("q.settings").GetValue<StringList>().SelectedIndex == 1);
                     qsettings.AddItem(new MenuItem("q.hit.x.chance.info.2", "Thats cast q for x enemies. Set on menu")).Show(qsettings.Item("q.settings").GetValue<StringList>().SelectedIndex == 1);
                     qsettings.AddItem(new MenuItem("q.antigapcloser", "(Q) Anti-Gapcloser").SetValue(true));
-
-                    Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
-                    .ValueChanged += (s, ar) =>
-                    {
-                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
-                    };
-                    Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
-                    if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
-                    {
-                        SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
-                    }
-
                     Config.AddSubMenu(qsettings);
                 }
                 var esettings = new Menu(":: E Settings", ":: E Settings").SetFontStyle(FontStyle.Bold, SharpDX.Color.HotPink);
@@ -179,10 +167,22 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(drawing);
                 }
 
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold)).Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 0);
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: sPrediction Settings");
+                }
+
                 Config.AddToMainMenu();
             }
 
-            SPrediction.Prediction.Initialize(Config);
+            
+
 
             Obj_AI_Base.OnProcessSpellCast += JannaOnProcess;
             AntiGapcloser.OnEnemyGapcloser += JannaOnGapcloser;

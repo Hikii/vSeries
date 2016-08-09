@@ -60,28 +60,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\clipper_library.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Data">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\LeagueSharp.Data.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\LeagueSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="SebbyLib">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\SebbyLib.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\SebbyLib.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SPrediction">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\LeagueSharp\System\SPrediction.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\O46HgaACH\References\SPrediction.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -117,7 +117,7 @@
     <Compile Include="Core\Plugins\OrbManager.cs" />
     <Compile Include="Core\Plugins\Orbwalker.cs" />
     <Compile Include="Core\Plugins\VersionChecker.cs" />
-	<Compile Include="Core\Plugins\PredictionUpdater.cs" />
+    <Compile Include="Core\Plugins\PredictionUpdater.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
