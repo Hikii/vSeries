@@ -72,7 +72,7 @@
       <HintPath>C:\Program Files (x86)\uQcT7kdiT\References\LeagueSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="SebbyLib">
-      <HintPath>C:\Program Files (x86)\O46HgaACH\References\SebbyLib.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\uQcT7kdiT\References\SebbyLib.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\uQcT7kdiT\References\SharpDX.dll</HintPath>
@@ -81,7 +81,7 @@
       <HintPath>C:\Program Files (x86)\uQcT7kdiT\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SPrediction">
-      <HintPath>C:\Program Files (x86)\O46HgaACH\References\SPrediction.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\uQcT7kdiT\References\SPrediction.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
