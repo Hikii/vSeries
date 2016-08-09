@@ -68,11 +68,6 @@ namespace vSupport_Series.Champions
                     Config.AddSubMenu(harass);
                 }
 
-                var shield = new Menu("Auto Shield", "Auto Shielding (E)");
-                {
-                    // Needs adding
-                }
-
                 var misc = new Menu("Miscellaneous", "Miscellaneous");
                 {
                     misc.AddItem(new MenuItem("tahm.anti.q", "Gapcloser (Q)").SetValue(true));

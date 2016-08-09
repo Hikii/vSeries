@@ -98,11 +98,6 @@ namespace vSupport_Series
                     new ActivatorBase();
                     VersionCheck.UpdateCheck();
                     break;
-                case "TahmKench":
-                    new TahmKench();
-                    new ActivatorBase();
-                    VersionCheck.UpdateCheck();
-                    break;
             }
         }
         
