@@ -63,7 +63,7 @@ namespace vSupport_Series.Champions
                 var harassMenu = new Menu(":: Harass Settings", ":: Harass Settings");
                 {
                     harassMenu.AddItem(new MenuItem("thresh.q.harass", "Use Q").SetValue(true));
-                    harassMenu.AddItem(new MenuItem("thresh.e.combo", "Use E").SetValue(true));
+                    harassMenu.AddItem(new MenuItem("thresh.e.harass", "Use E").SetValue(true));
                     
                     Config.AddSubMenu(harassMenu);
                 }
@@ -90,9 +90,8 @@ namespace vSupport_Series.Champions
                             lanternMenu.AddItem(new MenuItem("thresh.lantern" + ally.ChampionName, "Heal: " + ally.ChampionName).SetValue(true));
                             lanternMenu.AddItem(new MenuItem("thresh.lantern.percent" + ally.ChampionName, "Min. " + ally.ChampionName + " HP Percent").SetValue(new Slider(30, 1, 99)));
                         }
-
-                        Config.AddSubMenu(lanternMenu);
                     }
+                    Config.AddSubMenu(lanternMenu);
                 }
 
                 var drawing = new Menu(":: Draw Settings", ":: Draw Settings");
@@ -159,7 +158,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("thresh.q."+x.ChampionName,Config)))
                 {
-                    Q.vCast(enemy, SpellHitChance(Config, "q.hit.chance"), "prediction", Config);
+                    Q.vCast(enemy, SpellHitChance(Config, "thresh.q.hitchance"), "prediction", Config);
                 }
             }
 
@@ -192,7 +191,7 @@ namespace vSupport_Series.Champions
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("thresh.q." + x.ChampionName, Config)))
                 {
-                    Q.vCast(enemy, SpellHitChance(Config, "q.hit.chance"), "prediction", Config);
+                    Q.vCast(enemy, SpellHitChance(Config, "thresh.q.hitchance"), "prediction", Config);
                 }
             }
 
