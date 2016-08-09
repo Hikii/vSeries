@@ -88,14 +88,6 @@ namespace vSupport_Series
                     new ActivatorBase();
                     VersionCheck.UpdateCheck();
                     break;
-<<<<<<< HEAD
-=======
-                case "Taric":
-                    new Taric();
-                    new ActivatorBase();
-                    VersionCheck.UpdateCheck();
-                    break;
->>>>>>> origin/master
                 case "Thresh":
                     new Thresh();
                     new ActivatorBase();
@@ -106,8 +98,13 @@ namespace vSupport_Series
                     new ActivatorBase();
                     VersionCheck.UpdateCheck();
                     break;
+                case "TahmKench":
+                    new TahmKench();
+                    new ActivatorBase();
+                    VersionCheck.UpdateCheck();
+                    break;
             }
-            
         }
+        
     }
 }
